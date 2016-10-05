@@ -36,7 +36,10 @@ namespace TaskD
                 var min = test.Conceded - test.Scored + 1;
                 if (min < 0) min = 0;
 
-                var max = 30 - test.Scored + test.Conceded - (test.Place == "home" ? 1 : 0);
+                var curr = 30 - test.Scored + test.Conceded;
+                var max = test.Place == "home"
+                    ? curr > test.Conceded ? curr - 1 : curr
+                    : test.Scored == 30 ? curr - 1 : curr;
                 if (max > 30) max = 30;
 
                 Console.WriteLine($"{min} {max}");

@@ -11,6 +11,21 @@ namespace TaskD
             public string Place { get; set; }
             public int Scored { get; set; }
             public int Conceded { get; set; }
+
+            public int GetMin()
+            {
+                var min = Conceded - Scored + 1;
+                return min > 30 ? 30 : min < 0 ? 0 : min;
+            }
+
+            public int GetMax()
+            {
+                var curr = 30 - Scored + Conceded;
+                var max = Place == "home"
+                    ? curr >= Conceded ? curr - 1 : curr
+                    : Scored == 30 ? curr - 1 : curr;
+                return max > 30 ? 30 : max < 0 ? 0 : max;
+            }
         }
 
         static void Main(string[] args)
@@ -31,21 +46,7 @@ namespace TaskD
                 });
             }
 
-            tests.ForEach(test =>
-            {
-                var min = test.Conceded - test.Scored + 1;
-                if (min < 0) min = 0;
-                if (min > 30) min = 30;
-
-                var curr = 30 - test.Scored + test.Conceded;
-                var max = test.Place == "home"
-                    ? curr >= test.Conceded ? curr - 1 : curr
-                    : test.Scored == 30 ? curr - 1 : curr;
-                if (max < 0) max = 0;
-                if (max > 30) max = 30;
-
-                Console.WriteLine($"{min} {max}");
-            });
+            tests.ForEach(test => Console.WriteLine($"{test.GetMin()} {test.GetMax()}"));
         }
     }
 }
